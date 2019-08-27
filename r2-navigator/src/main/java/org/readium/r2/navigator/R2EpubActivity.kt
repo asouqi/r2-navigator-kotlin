@@ -193,7 +193,7 @@ open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope {
     /**
      * storeProgression() : save in the preference the last progression in the spine item
      */
-    fun storeProgression(locations: Locations?) {
+    open fun storeProgression(locations: Locations?) {
         storeDocumentIndex()
         val publicationIdentifier = publication.metadata.identifier
         preferences.edit().putString("$publicationIdentifier-documentLocations", locations?.toJSON().toString()).apply()
