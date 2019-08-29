@@ -21,16 +21,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.readium.r2.navigator.extensions.layoutDirectionIsRTL
-import org.readium.r2.navigator.pager.PageCallback
-import org.readium.r2.navigator.pager.R2EpubPageFragment
-import org.readium.r2.navigator.pager.R2PagerAdapter
-import org.readium.r2.navigator.pager.R2ViewPager
+import org.readium.r2.navigator.pager.*
 import org.readium.r2.shared.*
 import java.net.URI
 import kotlin.coroutines.CoroutineContext
 
 
-open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope {
+open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope, SwipeCallBack {
     /**
      * Context of this scope.
      */
@@ -193,7 +190,7 @@ open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope {
     /**
      * storeProgression() : save in the preference the last progression in the spine item
      */
-    open fun storeProgression(locations: Locations?) {
+    fun storeProgression(locations: Locations?) {
         storeDocumentIndex()
         val publicationIdentifier = publication.metadata.identifier
         preferences.edit().putString("$publicationIdentifier-documentLocations", locations?.toJSON().toString()).apply()
@@ -379,5 +376,8 @@ open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope {
         //optional
     }
 
+    override fun onSwipe(progression: Double, url: String) {
+        //optional
+    }
 }
 

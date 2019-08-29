@@ -139,6 +139,12 @@ open class R2BasicWebView(context: Context, attrs: AttributeSet) : WebView(conte
     }
 
     @android.webkit.JavascriptInterface
+    fun swipe() {
+        if (progression != 0.0 && progression != 1.0)
+            activity.onSwipe(progression,resourceUrl!!.split(".epub")[1])
+    }
+
+    @android.webkit.JavascriptInterface
     fun centerTapped() {
         activity.toggleActionBar()
     }
@@ -225,4 +231,8 @@ open class R2BasicWebView(context: Context, attrs: AttributeSet) : WebView(conte
     fun removeProperty(key: String) {
         this.evaluateJavascript("removeProperty(\"$key\");", null)
     }
+}
+
+interface SwipeCallBack {
+    fun onSwipe(progression: Double, url: String)
 }
