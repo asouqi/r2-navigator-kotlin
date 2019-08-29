@@ -74,4 +74,4 @@ var handleTouchEnd = function(event) {
     }else {
         swipe(800);
     }
-};
+}; 
