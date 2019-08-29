@@ -37,6 +37,7 @@ var handleTouchStart = function(event) {
 
 };
 
+var swipe = (time) => {let i = setInterval(() => {Android.swipe(); clearInterval(i)}, time);}
 // When a touch ends, check if any action has to be made, and contact native code.
 var handleTouchEnd = function(event) {
     if(!singleTouchGesture) {
@@ -57,9 +58,11 @@ var handleTouchEnd = function(event) {
         var position = (touch.screenX % availWidth) / availWidth;
         if (position <= 0.2) {
             console.log("LeftTapped");
+            swipe(500);
             Android.scrollLeft();
         } else if(position >= 0.8) {
             console.log("RightTapped");
+            swipe(500);
             Android.scrollRight();
         } else {
             console.log("CenterTapped");
@@ -68,5 +71,7 @@ var handleTouchEnd = function(event) {
         event.stopPropagation();
         event.preventDefault();
         return;
+    }else {
+        swipe(800);
     }
 };
