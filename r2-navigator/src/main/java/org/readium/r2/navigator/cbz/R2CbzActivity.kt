@@ -7,7 +7,7 @@
  * LICENSE file present in the project repository where this source code is maintained.
  */
 
-package org.readium.r2.navigator
+package org.readium.r2.navigator.cbz
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.readium.r2.navigator.R
+import org.readium.r2.navigator.R2ActivityListener
 import org.readium.r2.navigator.extensions.layoutDirectionIsRTL
 import org.readium.r2.navigator.pager.R2PagerAdapter
 import org.readium.r2.navigator.pager.R2ViewPager
@@ -24,21 +26,21 @@ import org.readium.r2.shared.Publication
 import kotlin.coroutines.CoroutineContext
 
 
-class R2CbzActivity : AppCompatActivity(), CoroutineScope {
+class R2CbzActivity : AppCompatActivity(), CoroutineScope, R2ActivityListener {
     /**
      * Context of this scope.
      */
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 
-    private lateinit var preferences: SharedPreferences
-    lateinit var resourcePager: R2ViewPager
-    var resources = arrayListOf<String>()
+    override lateinit var preferences: SharedPreferences
+    override lateinit var resourcePager: R2ViewPager
+    override lateinit var publicationPath: String
+    override lateinit var publication: Publication
+    override lateinit var publicationFileName: String
+    override lateinit var publicationIdentifier: String
 
-    private lateinit var publicationPath: String
-    private lateinit var publication: Publication
-    private lateinit var cbzName: String
-    private lateinit var publicationIdentifier: String
+    var resources = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +51,10 @@ class R2CbzActivity : AppCompatActivity(), CoroutineScope {
 
         publicationPath = intent.getStringExtra("publicationPath")
         publication = intent.getSerializableExtra("publication") as Publication
-        cbzName = intent.getStringExtra("cbzName")
+        publicationFileName = intent.getStringExtra("publicationFileName")
         publicationIdentifier = publication.metadata.identifier
         title = publication.metadata.title
-
+        
         for (link in publication.pageList) {
             resources.add(link.href.toString())
         }
@@ -94,7 +96,7 @@ class R2CbzActivity : AppCompatActivity(), CoroutineScope {
         preferences.edit().putInt("$publicationIdentifier-document", documentIndex).apply()
     }
 
-    fun nextResource(v: View? = null) {
+    override fun nextResource(v: View?) {
         launch {
             if (layoutDirectionIsRTL()) {
                 // The view has RTL layout
@@ -106,7 +108,7 @@ class R2CbzActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    fun previousResource(v: View? = null) {
+    override fun previousResource(v: View?) {
         launch {
             if (layoutDirectionIsRTL()) {
                 // The view has RTL layout
@@ -119,19 +121,21 @@ class R2CbzActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    fun toggleActionBar(v: View? = null) {
-        launch {
-            if (supportActionBar!!.isShowing) {
-                resourcePager.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE)
-            } else {
-                resourcePager.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    override fun toggleActionBar(v: View?) {
+        if (allowToggleActionBar) {
+            launch {
+                if (supportActionBar!!.isShowing) {
+                    resourcePager.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE)
+                } else {
+                    resourcePager.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                }
             }
         }
     }

@@ -23,11 +23,14 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.webkit.WebViewClientCompat
 import org.json.JSONObject
 import org.readium.r2.navigator.R
-import org.readium.r2.navigator.R2EpubActivity
+import org.readium.r2.navigator.R2ActivityListener
+import org.readium.r2.navigator.R2BasicWebView
+import org.readium.r2.navigator.R2WebView
 import org.readium.r2.shared.APPEARANCE_REF
 import org.readium.r2.shared.Locations
 import org.readium.r2.shared.PageProgressionDirection
@@ -43,11 +46,12 @@ class R2EpubPageFragment : Fragment() {
         get() = arguments!!.getString("title")
 
     lateinit var webView: R2WebView
+    lateinit var listener: R2ActivityListener
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val v = inflater.inflate(R.layout.fragment_page_epub, container, false)
+        val v = inflater.inflate(R.layout.viewpager_fragment_epub, container, false)
         val preferences = activity?.getSharedPreferences("org.readium.r2.settings", Context.MODE_PRIVATE)!!
 
         // Set text color depending of appearance preference
@@ -70,7 +74,8 @@ class R2EpubPageFragment : Fragment() {
 
         webView = v!!.findViewById(R.id.webView) as R2WebView
 
-        webView.activity = activity as R2EpubActivity
+        webView.activity = activity as AppCompatActivity
+        webView.listener = activity as R2ActivityListener
 
         webView.settings.javaScriptEnabled = true
         webView.isVerticalScrollBarEnabled = false
@@ -99,7 +104,7 @@ class R2EpubPageFragment : Fragment() {
                     in topDecile..bottomDecile -> {
                         if (!endReached) {
                             endReached = true
-                            webView.activity.onPageEnded(endReached)
+                            webView.listener.onPageEnded(endReached)
                             when (scrollMode) {
                                 true -> {
                                     (v.findViewById(R.id.resource_end) as TextView).visibility = View.VISIBLE
@@ -110,7 +115,7 @@ class R2EpubPageFragment : Fragment() {
                     else -> {
                         if (endReached) {
                             endReached = false
-                            webView.activity.onPageEnded(endReached)
+                            webView.listener.onPageEnded(endReached)
                             when (scrollMode) {
                                 true -> {
                                     (v.findViewById(R.id.resource_end) as TextView).visibility = View.GONE
@@ -142,12 +147,12 @@ class R2EpubPageFragment : Fragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                val currentFragment:R2EpubPageFragment = (webView.activity.resourcePager.adapter as R2PagerAdapter).getCurrentFragment() as R2EpubPageFragment
-                val previousFragment:R2EpubPageFragment? = (webView.activity.resourcePager.adapter as R2PagerAdapter).getPreviousFragment() as? R2EpubPageFragment
-                val nextFragment:R2EpubPageFragment? = (webView.activity.resourcePager.adapter as R2PagerAdapter).getNextFragment() as? R2EpubPageFragment
+                val currentFragment:R2EpubPageFragment = (webView.listener.resourcePager?.adapter as R2PagerAdapter).getCurrentFragment() as R2EpubPageFragment
+                val previousFragment:R2EpubPageFragment? = (webView.listener.resourcePager?.adapter as R2PagerAdapter).getPreviousFragment() as? R2EpubPageFragment
+                val nextFragment:R2EpubPageFragment? = (webView.listener.resourcePager?.adapter as R2PagerAdapter).getNextFragment() as? R2EpubPageFragment
 
                 if (this@R2EpubPageFragment.tag == currentFragment.tag) {
-                    var locations = Locations.fromJSON(JSONObject(preferences.getString("${webView.activity.publicationIdentifier}-documentLocations", "{}")))
+                    var locations = Locations.fromJSON(JSONObject(preferences.getString("${webView.listener.publicationIdentifier}-documentLocations", "{}")))
 
                     // TODO this seems to be needed, will need to test more
                     if (url!!.indexOf("#") > 0) {
@@ -160,7 +165,7 @@ class R2EpubPageFragment : Fragment() {
                         locations.progression?.let { progression ->
                             currentFragment.webView.progression = progression
 
-                            if (webView.activity.preferences.getBoolean(SCROLL_REF, false)) {
+                            if (webView.listener.preferences.getBoolean(SCROLL_REF, false)) {
 
                             currentFragment.webView.scrollToPosition(progression)
 
@@ -179,7 +184,7 @@ class R2EpubPageFragment : Fragment() {
 
                 nextFragment?.let {
                     if (this@R2EpubPageFragment.tag == nextFragment.tag){
-                        if (nextFragment.webView.activity.publication.metadata.direction == PageProgressionDirection.rtl.name) {
+                        if (nextFragment.webView.listener.publication.metadata.direction == PageProgressionDirection.rtl.name) {
                             // The view has RTL layout
                             nextFragment.webView.scrollToEnd()
                         } else {
@@ -191,7 +196,7 @@ class R2EpubPageFragment : Fragment() {
 
                 previousFragment?.let {
                     if (this@R2EpubPageFragment.tag == previousFragment.tag){
-                        if (previousFragment.webView.activity.publication.metadata.direction == PageProgressionDirection.rtl.name) {
+                        if (previousFragment.webView.listener.publication.metadata.direction == PageProgressionDirection.rtl.name) {
                             // The view has RTL layout
                             previousFragment.webView.scrollToStart()
                         } else {
@@ -221,7 +226,7 @@ class R2EpubPageFragment : Fragment() {
             true
         }
 
-        val locations = Locations.fromJSON(JSONObject(preferences.getString("${webView.activity.publicationIdentifier}-documentLocations", "{}")))
+        val locations = Locations.fromJSON(JSONObject(preferences.getString("${webView.listener.publicationIdentifier}-documentLocations", "{}")))
 
         locations.fragment?.let {
             var anchor = it

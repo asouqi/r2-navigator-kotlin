@@ -17,10 +17,12 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.webkit.WebViewClientCompat
 import org.readium.r2.navigator.R
-import org.readium.r2.navigator.R2EpubActivity
+import org.readium.r2.navigator.R2ActivityListener
+import org.readium.r2.navigator.R2BasicWebView
 import org.readium.r2.navigator.fxl.R2FXLLayout
 import org.readium.r2.navigator.fxl.R2FXLOnDoubleTapListener
 
@@ -41,7 +43,7 @@ class R2FXLPageFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         secondResourceUrl?.let {
-            val view: View = inflater.inflate(R.layout.fxlview_double, container, false)
+            val view: View = inflater.inflate(R.layout.fragment_fxllayout_double, container, false)
             view.setPadding(0, 0, 0, 0)
 
             val r2FXLLayout = view.findViewById<View>(R.id.r2FXLLayout) as R2FXLLayout
@@ -50,7 +52,7 @@ class R2FXLPageFragment : Fragment() {
 
             r2FXLLayout.addOnTapListener(object : R2FXLLayout.OnTapListener {
                 override fun onTap(view: R2FXLLayout, info: R2FXLLayout.TapInfo): Boolean {
-                    (activity as R2EpubActivity).toggleActionBar()
+                    (activity as R2ActivityListener).toggleActionBar()
                     return true
                 }
             })
@@ -63,7 +65,7 @@ class R2FXLPageFragment : Fragment() {
 
             return view
         }?:run {
-            val view: View = inflater.inflate(R.layout.fxlview_single, container, false)
+            val view: View = inflater.inflate(R.layout.fragment_fxllayout_single, container, false)
             view.setPadding(0, 0, 0, 0)
 
             val r2FXLLayout = view.findViewById<View>(R.id.r2FXLLayout) as R2FXLLayout
@@ -72,7 +74,7 @@ class R2FXLPageFragment : Fragment() {
 
             r2FXLLayout.addOnTapListener(object : R2FXLLayout.OnTapListener {
                 override fun onTap(view: R2FXLLayout, info: R2FXLLayout.TapInfo): Boolean {
-                    (activity as R2EpubActivity).toggleActionBar()
+                    (activity as R2ActivityListener).toggleActionBar()
                     return true
                 }
             })
@@ -87,7 +89,7 @@ class R2FXLPageFragment : Fragment() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView(webView: R2BasicWebView, resourceUrl: String?) {
-        webView.activity = activity as R2EpubActivity
+        webView.activity = activity as AppCompatActivity
 
         webView.settings.javaScriptEnabled = true
         webView.isVerticalScrollBarEnabled = false
