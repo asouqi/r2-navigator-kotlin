@@ -20,8 +20,8 @@ import androidx.viewpager.widget.ViewPager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.readium.r2.navigator.BASE_URL
 import org.readium.r2.navigator.extensions.layoutDirectionIsRTL
-import org.readium.r2.navigator.pager.PageCallback
 import org.readium.r2.navigator.pager.R2EpubPageFragment
 import org.readium.r2.navigator.pager.R2PagerAdapter
 import org.readium.r2.navigator.pager.R2ViewPager
@@ -30,7 +30,7 @@ import java.net.URI
 import kotlin.coroutines.CoroutineContext
 
 
-open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope {
+open class R2EpubActivity : AppCompatActivity(), CoroutineScope {
     /**
      * Context of this scope.
      */
@@ -57,10 +57,10 @@ open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_r2_viewpager)
+//        setContentView(R.layout.activity_r2_viewpager)
 
         preferences = getSharedPreferences("org.readium.r2.settings", Context.MODE_PRIVATE)
-        resourcePager = findViewById(R.id.resourcePager)
+//        resourcePager = findViewById(R.id.resourcePager)
         resourcesSingle = ArrayList()
         resourcesDouble = ArrayList()
 
@@ -369,14 +369,6 @@ open class R2EpubActivity : AppCompatActivity(), PageCallback, CoroutineScope {
                 }
             }
         }
-    }
-
-    override fun onPageChanged(pageIndex: Int, totalPages: Int, url: String) {
-        //optional
-    }
-
-    override fun onPageEnded(end: Boolean) {
-        //optional
     }
 
 }

@@ -139,5 +139,9 @@ class R2CbzActivity : AppCompatActivity(), CoroutineScope, R2ActivityListener {
             }
         }
     }
+
+    override fun onSwipe(progression: Double, url: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
 

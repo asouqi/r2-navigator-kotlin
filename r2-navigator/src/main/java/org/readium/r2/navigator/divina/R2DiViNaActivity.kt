@@ -102,5 +102,9 @@ open class R2DiViNaActivity : AppCompatActivity(), CoroutineScope, R2ActivityLis
         super.onDestroy()
         divinaWebView.evaluateJavascript("if (player) { player.destroy(); };", null)
     }
+
+    override fun onSwipe(progression: Double, url: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
 
