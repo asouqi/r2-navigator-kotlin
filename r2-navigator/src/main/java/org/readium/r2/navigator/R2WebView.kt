@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.readium.r2.shared.SCROLL_REF
 import timber.log.Timber
 
 
@@ -679,17 +680,19 @@ class R2WebView(context: Context, attrs: AttributeSet) : R2BasicWebView(context,
                 }
             }
             MotionEvent.ACTION_UP -> if (mIsBeingDragged) {
-                val velocityTracker = mVelocityTracker
-                velocityTracker!!.computeCurrentVelocity(2000, mMaximumVelocity.toFloat())
-                val initialVelocity = velocityTracker.getXVelocity(mActivePointerId).toInt()
+                if (!listener.preferences.getBoolean(SCROLL_REF, false)) {
+                    val velocityTracker = mVelocityTracker
+                    velocityTracker!!.computeCurrentVelocity(2000, mMaximumVelocity.toFloat())
+                    val initialVelocity = velocityTracker.getXVelocity(mActivePointerId).toInt()
 
-                val currentPage = scrollX / getClientWidth()
-                val activePointerIndex = ev.findPointerIndex(mActivePointerId)
-                val x = ev.getX(activePointerIndex)
-                val totalDelta = (x - mInitialMotionX).toInt()
-                val nextPage = determineTargetPage(currentPage, 0f, initialVelocity, totalDelta)
+                    val currentPage = scrollX / getClientWidth()
+                    val activePointerIndex = ev.findPointerIndex(mActivePointerId)
+                    val x = ev.getX(activePointerIndex)
+                    val totalDelta = (x - mInitialMotionX).toInt()
+                    val nextPage = determineTargetPage(currentPage, 0f, initialVelocity, totalDelta)
 
-                setCurrentItemInternal(nextPage, true, initialVelocity)
+                    setCurrentItemInternal(nextPage, true, initialVelocity)
+                } else mIsBeingDragged = false
             }
 
             MotionEvent.ACTION_CANCEL -> if (mIsBeingDragged) {
