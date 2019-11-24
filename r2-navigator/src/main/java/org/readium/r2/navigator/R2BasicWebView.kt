@@ -149,8 +149,11 @@ open class R2BasicWebView(context: Context, attrs: AttributeSet) : WebView(conte
         if (progression != 0.0 && progression != 1.0) {
             val url = resourceUrl!!.split(".epub")[1]
             val resourcePositionList = listener.publication.resourcePositions[url]
-            val positionIndex = ceil(progression * resourcePositionList!!.size).toInt()
-            listener.onSwipe(resourcePositionList[positionIndex-1].locations!!.position!!)
+            // Ignore older swipe
+            if(listener.publication.tableOfContents[listener.resourcePager!!.currentItem - 1].href.equals(url)){
+                val positionIndex = ceil(progression * resourcePositionList!!.size).toInt()
+                listener.onSwipe(resourcePositionList[positionIndex - 1].locations!!.position!!)
+            }
         }
     }
 
