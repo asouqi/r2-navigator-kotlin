@@ -966,7 +966,7 @@ class R2WebView(context: Context, attrs: AttributeSet) : R2BasicWebView(context,
         return false
     }
 
-    internal val numPages: Int
+     val numPages: Int
         get() {
             var numPages = 0
             try {

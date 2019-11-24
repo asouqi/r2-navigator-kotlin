@@ -30,6 +30,7 @@ import org.jsoup.safety.Whitelist
 import org.readium.r2.shared.Locations
 import org.readium.r2.shared.SCROLL_REF
 import org.readium.r2.shared.getAbsolute
+import kotlin.math.ceil
 
 
 /**
@@ -145,8 +146,12 @@ open class R2BasicWebView(context: Context, attrs: AttributeSet) : WebView(conte
 
     @android.webkit.JavascriptInterface
     fun swipe() {
-        if (progression != 0.0 && progression != 1.0)
-            listener.onSwipe(progression,resourceUrl!!.split(".epub")[1])
+        if (progression != 0.0 && progression != 1.0) {
+            val url = resourceUrl!!.split(".epub")[1]
+            val resourcePositionList = listener.publication.resourcePositions[url]
+            val positionIndex = ceil(progression * resourcePositionList!!.size).toInt()
+            listener.onSwipe(resourcePositionList[positionIndex-1].locations!!.position!!)
+        }
     }
 
     @android.webkit.JavascriptInterface

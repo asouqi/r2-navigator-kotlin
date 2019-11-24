@@ -351,7 +351,7 @@ open class R2AudiobookActivity : AppCompatActivity(), CoroutineScope, R2Activity
 
     }
 
-    override fun onSwipe(progression: Double, url: String) {
+    override fun onSwipe(position: Long) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
