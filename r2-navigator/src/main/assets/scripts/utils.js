@@ -151,7 +151,7 @@ var scrollLeft = function() {
         return "";
     } else {
         document.scrollingElement.scrollLeft = 0;
-        update(1.0);
+        //update(1.0);
         return "edge"; // Need to previousDocument.
     }
 };
@@ -205,7 +205,7 @@ var scrollRight = function() {
 
         document.scrollingElement.scrollLeft = scrollWidth;
         last_known_scroll_position = scrollWidth;
-        update(0.0);
+        //update(0.0);
         return "edge"; // Need to nextDocument.
     }
 };
