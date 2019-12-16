@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.readium.r2.navigator.R
 import org.readium.r2.navigator.R2ActivityListener
+import org.readium.r2.navigator.R2WebView
 import org.readium.r2.navigator.extensions.layoutDirectionIsRTL
 import org.readium.r2.navigator.pager.R2PagerAdapter
 import org.readium.r2.navigator.pager.R2ViewPager
@@ -141,6 +142,10 @@ class R2CbzActivity : AppCompatActivity(), CoroutineScope, R2ActivityListener {
     }
 
     override fun onSwipe(position: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onPageFinishLoading(webView: R2WebView) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.readium.r2.navigator.R
 import org.readium.r2.navigator.R2ActivityListener
 import org.readium.r2.navigator.R2BasicWebView
+import org.readium.r2.navigator.R2WebView
 import org.readium.r2.shared.Publication
 import kotlin.coroutines.CoroutineContext
 
@@ -104,6 +105,10 @@ open class R2DiViNaActivity : AppCompatActivity(), CoroutineScope, R2ActivityLis
     }
 
     override fun onSwipe(position: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onPageFinishLoading(webView: R2WebView) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

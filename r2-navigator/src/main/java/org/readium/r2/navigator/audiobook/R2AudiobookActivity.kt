@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import org.json.JSONObject
 import org.readium.r2.navigator.R
 import org.readium.r2.navigator.R2ActivityListener
+import org.readium.r2.navigator.R2WebView
 import org.readium.r2.shared.Locations
 import org.readium.r2.shared.Locator
 import org.readium.r2.shared.Publication
@@ -352,6 +353,10 @@ open class R2AudiobookActivity : AppCompatActivity(), CoroutineScope, R2Activity
     }
 
     override fun onSwipe(position: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onPageFinishLoading(webView: R2WebView) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

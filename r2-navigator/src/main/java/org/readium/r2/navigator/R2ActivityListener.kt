@@ -37,5 +37,6 @@ interface R2ActivityListener {
     fun onPageChanged(pageIndex: Int, totalPages: Int, url: String) {}
     fun onPageEnded(end: Boolean) {}
     fun onSwipe(position: Long)
+    fun onPageFinishLoading(webView: R2WebView)
 
 }
