@@ -205,7 +205,7 @@ class R2EpubPageFragment : Fragment() {
                         }
                     }
                 }
-
+                webView.listener.onPageFinishLoading(webView)
             }
 
             // prevent favicon.ico to be loaded, this was causing NullPointerException in NanoHttp

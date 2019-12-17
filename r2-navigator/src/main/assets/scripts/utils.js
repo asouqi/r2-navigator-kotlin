@@ -147,7 +147,6 @@ var scrollLeft = function() {
         document.scrollingElement.scrollLeft = snapOffset(offset);
         last_known_scroll_position = window.scrollX / document.scrollingElement.scrollWidth;
         update(last_known_scroll_position);
-        Android.swipe();
         return "";
     } else {
         document.scrollingElement.scrollLeft = 0;
@@ -185,7 +184,6 @@ var scrollLeftRTL = function() {
     }
 };
 
-var swipe = (time) => {let i = setInterval(() => { Android.swipe();clearInterval(i)}, time);}
 
 var scrollRight = function() {
     console.log("scrollRight");
@@ -198,7 +196,6 @@ var scrollRight = function() {
         document.scrollingElement.scrollLeft = snapOffset(offset);
         last_known_scroll_position = scrollWidth / document.scrollingElement.scrollWidth;
         update(last_known_scroll_position);
-        swipe(20);
         return "";
     } else {
         console.log("else");

@@ -13,6 +13,7 @@ import android.content.Context
 import android.os.Build
 import android.text.Html
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -136,25 +137,18 @@ open class R2BasicWebView(context: Context, attrs: AttributeSet) : WebView(conte
     @android.webkit.JavascriptInterface
     fun progressionDidChange(positionString: String) {
         progression = positionString.toDouble()
-        listener.storeProgression(Locations(progression = progression))
+        val url = resourceUrl!!.split(".epub")[1]
+        // Ignore other WebView progression event
+        if (listener.publication.readingOrder[listener.resourcePager!!.currentItem].href.equals(url)) {
+            val resourcePositionList = listener.publication.resourcePositions[url]
+                val positionIndex = ceil(progression * (resourcePositionList!!.size - 1)).toInt()
+                listener.storeProgression(resourcePositionList[positionIndex].locations)
+        }
     }
 
     @android.webkit.JavascriptInterface
     fun centerTapped() {
         listener.toggleActionBar()
-    }
-
-    @android.webkit.JavascriptInterface
-    fun swipe() {
-        if (progression != 0.0 && progression != 1.0) {
-            val url = resourceUrl!!.split(".epub")[1]
-            val resourcePositionList = listener.publication.resourcePositions[url]
-            // Ignore older swipe
-            if(listener.publication.tableOfContents[listener.resourcePager!!.currentItem - 1].href.equals(url)){
-                val positionIndex = ceil(progression * resourcePositionList!!.size).toInt()
-                listener.onSwipe(resourcePositionList[positionIndex - 1].locations!!.position!!)
-            }
-        }
     }
 
     @android.webkit.JavascriptInterface

@@ -37,7 +37,6 @@ var handleTouchStart = function(event) {
 
 };
 
-var swipe = (time) => {let i = setInterval(() => {Android.swipe(); clearInterval(i)}, time);}
 // When a touch ends, check if any action has to be made, and contact native code.
 var handleTouchEnd = function(event) {
     if(!singleTouchGesture) {
@@ -69,7 +68,5 @@ var handleTouchEnd = function(event) {
         event.stopPropagation();
         event.preventDefault();
         return;
-    }else {
-        swipe(600);
     }
 }; 
