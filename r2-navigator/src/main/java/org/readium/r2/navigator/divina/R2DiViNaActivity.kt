@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.readium.r2.navigator.R
 import org.readium.r2.navigator.R2ActivityListener
 import org.readium.r2.navigator.R2BasicWebView
+import org.readium.r2.navigator.R2WebView
 import org.readium.r2.shared.Publication
 import kotlin.coroutines.CoroutineContext
 
