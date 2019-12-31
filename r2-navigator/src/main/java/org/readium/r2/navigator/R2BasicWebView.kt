@@ -137,12 +137,13 @@ open class R2BasicWebView(context: Context, attrs: AttributeSet) : WebView(conte
     @android.webkit.JavascriptInterface
     fun progressionDidChange(positionString: String) {
         progression = positionString.toDouble()
-        val url = resourceUrl!!.split(".epub")[1]
         // Ignore other WebView progression event
-        if (listener.publication.readingOrder[listener.resourcePager!!.currentItem].href.equals(url)) {
-            val resourcePositionList = listener.publication.resourcePositions[url]
+        if (resourceUrl!!.contains(listener.publication.readingOrder[listener.resourcePager!!.currentItem].href.toString())) {
+            resourceUrl?.let {
+                val resourcePositionList = listener.publication.resourcePositions[it.subSequence(it.indexOf("/OPS"), it.length)]
                 val positionIndex = ceil(progression * (resourcePositionList!!.size - 1)).toInt()
                 listener.storeProgression(resourcePositionList[positionIndex].locations)
+            }
         }
     }
 
