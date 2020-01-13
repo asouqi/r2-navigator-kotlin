@@ -129,7 +129,7 @@ var scrollToPosition = function(position, dir) {
         } else {
             offset = document.scrollingElement.scrollWidth * position;
         }
-        document.scrollingElement.scrollLeft = snapOffset(offset);
+        document.scrollingElement.scrollLeft = scrollingSnapOffset(offset);
         update(position);
     } else {
         var offset = Math.round(document.body.scrollHeight * position);
@@ -138,6 +138,14 @@ var scrollToPosition = function(position, dir) {
         update(position);
     }
 };
+
+var scrollingSnapOffset = function(offset){
+        var value = offset + 1;
+        var diff = (value % window.innerWidth);
+        if (diff <= 1)
+            return value;
+        return value + (window.innerWidth - diff);
+    }
 
 var scrollLeft = function() {
     console.log("scrollLeft");
