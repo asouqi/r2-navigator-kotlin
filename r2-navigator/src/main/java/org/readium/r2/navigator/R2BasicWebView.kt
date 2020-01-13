@@ -138,7 +138,7 @@ open class R2BasicWebView(context: Context, attrs: AttributeSet) : WebView(conte
     fun progressionDidChange(positionString: String) {
         progression = positionString.toDouble()
         // Ignore other WebView progression event
-        if ( progression != 0.0 && resourceUrl!!.contains(listener.publication.readingOrder[listener.resourcePager!!.currentItem].href.toString())) {
+        if ( progression != 0.0 && progression != 1.0 && resourceUrl!!.contains(listener.publication.readingOrder[listener.resourcePager!!.currentItem].href.toString())) {
             resourceUrl?.let {
                 val resourcePositionList = listener.publication.resourcePositions[it.subSequence(it.indexOf("/OPS"), it.length)]
                 val positionIndex = ceil(progression * (resourcePositionList!!.size - 1)).toInt()
